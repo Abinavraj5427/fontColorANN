@@ -11,7 +11,7 @@ def feedforward(X, W1, W2, B1, B2):
     A1 = X.dot(W1) + B1
     Z = sigmoid(A1)
     A2 = Z.dot(W2) + B2
-    return sigmoid(A2)
+    return sigmoid(A2), A1, A2
 
 def class_rate(YP, Y):
     rate = 0
@@ -45,13 +45,26 @@ B2 = np.random.randn(K)
 YP = feedforward(X, W1, W2, B1, B2)
 
 train_size = .85
-test_size  = .15
+epochs = batch_size = 50000
 
-X_train =
-X_test = 
-Y_train = 
-Y_test = 
+
+X_train = X[:(int)(X.shape[0] *train_size),:]
+X_test = X[(int)(X.shape[0] *train_size):,:]
+Y_train =  Y[:(int)(X.shape[0] *train_size),:]
+Y_test = Y[(int)(X.shape[0] *train_size):,:] 
+
+X_batch = np.split(X_train, batch_size)
+Y_batch = np.split(Y_train, batch_size)
+
+learning_rate = 1e-7
 
 for epoch in range(epochs):
+    X = X_batch[epoch]
+    Y = Y_batch[epoch]
+
+    YP, Z1, Z2 = feedforward(X, W1, W2, B1, B2)
 
 
+    W1 = learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
+    W2 = learning_rate * gradient_w2(YP, Y, Z2, A2)
+    B1 = learning_rate * 
