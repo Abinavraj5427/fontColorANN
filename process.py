@@ -4,8 +4,10 @@ import numpy as np
 def get_data():
     df = pd.read_csv("test.csv")
     Y = df["Font"].values
-    df.drop(columns = ["Font"])
+    df = df.drop(columns = ["Font"])
     X = df.values
+
+    X = X.astype('float32') 
 
     X[:,0] = (X[:,0] - X[:,0].mean())/X[:, 0].std()
     X[:,1] = (X[:,1] - X[:,1].mean())/X[:, 1].std()

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from process import get_data
 
 def sigmoid(Z):
@@ -8,18 +9,17 @@ def feedforward(X, W1, W2, B1, B2):
     A1 = X.dot(W1) + B1
     Z = sigmoid(A1)
     A2 = Z.dot(W2) + B2
-    return sigmoid(A2), Z
-
-def class_rate(YP, Y):
-    rate = 0
-    return rate
+    Z2 = sigmoid(A2)
+    return Z2, Z
 
 def gradient_w1 (Y, T, Z2, W2, Z1, X):
+    print(X.shape)
     dw2 =  W2.dot((T - Y) * Z2 * (1 - Z2))
+    print(dw2.shape)
     return X.dot(dw2  * Z1 * (1 - Z1))
 
-def gradient_w2(Y, T, Z2, A2):
-    return A2.T.dot((T - Y) * Z2 * (1 - Z2)).sum(axis = 0) 
+def gradient_w2(Y, T, Z2, Z1):
+    return Z1.T.dot((T - Y) * Z2 * (1 - Z2)).sum(axis = 0) 
 
 def gradient_b2(Y, T, Z):
     return ((T - Y) * Z * (1 - Z)).sum(axis = 0)
@@ -72,7 +72,8 @@ for epoch in range(epochs):
     X = X_batch[epoch]
     Y = Y_batch[epoch]
 
-    YP, Z1, Z2 = feedforward(X, W1, W2, B1, B2)
+    YP, Z1 = feedforward(X, W1, W2, B1, B2)
+    Z2 = YP
 
     l = loss(YP, Y)
     losses.append(l)
@@ -82,10 +83,11 @@ for epoch in range(epochs):
     if(epoch % 100 == 0):
         print("loss: {} class rate: {}".format(l, r))
 
-    W2 = learning_rate * gradient_w2(YP, Y, Z2, A2)
-    B2 = learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
+    W2 = learning_rate * gradient_w2(YP, Y, Z2, Z1)
+    B2 = learning_rate * gradient_b2(YP, Y, Z2)
     W1 = learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
-    B1 = learning_rate * gradient_b2(YP, Y, Z2)
+    B1 = learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
+    
 
 
 plt.plot(losses)
