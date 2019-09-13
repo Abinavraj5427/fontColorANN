@@ -13,9 +13,9 @@ def feedforward(X, W1, W2, B1, B2):
     return Z2, Z
 
 def gradient_w1 (Y, T, Z2, W2, Z1, X):
-    print(X.shape)
-    dw2 =  W2.dot((T - Y) * Z2 * (1 - Z2))
+    dw2 =  ((T - Y) * Z2 * (1 - Z2)).dot(W2.T)
     print(dw2.shape)
+    print(X.shape)
     return X.dot(dw2  * Z1 * (1 - Z1))
 
 def gradient_w2(Y, T, Z2, Z1):
@@ -42,7 +42,6 @@ def loss(Y, T):
 
 
 X, Y = get_data()
-
 
 D = X.shape[1]
 M = 3
