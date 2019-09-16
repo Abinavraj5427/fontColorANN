@@ -13,10 +13,8 @@ def feedforward(X, W1, W2, B1, B2):
     return Z2, Z
 
 def gradient_w1 (Y, T, Z2, W2, Z1, X):
-    dw2 =  ((T - Y) * Z2 * (1 - Z2)).dot(W2.T)
-    print(dw2.shape)
-    print(X.shape)
-    return X.dot(dw2  * Z1 * (1 - Z1))
+    dw2 =  ((T - Y) * Z2 * (1 - Z2)).dot(W2.T) #N x M
+    return X.T.dot(dw2  * Z1 * (1 - Z1))
 
 def gradient_w2(Y, T, Z2, Z1):
     return Z1.T.dot((T - Y) * Z2 * (1 - Z2)).sum(axis = 0) 
@@ -25,7 +23,7 @@ def gradient_b2(Y, T, Z):
     return ((T - Y) * Z * (1 - Z)).sum(axis = 0)
 
 def gradient_b1(Y, T, Z2, W2, Z1):
-    dw2 =  W2.dot((T - Y) * Z2 * (1 - Z2))
+    dw2 =  ((T - Y) * Z2 * (1 - Z2)).dot(W2.T)
     return np.sum(dw2  * Z1 * (1 - Z1), axis = 0)
 
 def class_rate(Y, T):
@@ -52,6 +50,7 @@ B1 = np.random.randn(M)
 W2 = np.random.randn(M, K)
 B2 = np.random.randn(K)
 
+
 train_size = .85
 epochs = batch_size = 50000
 
@@ -73,19 +72,19 @@ for epoch in range(epochs):
 
     YP, Z1 = feedforward(X, W1, W2, B1, B2)
     Z2 = YP
-
     l = loss(YP, Y)
     losses.append(l)
-    r = class_rate(YP, Y)
+    LP = np.rint(YP)
+    r = class_rate(LP, Y)
     rates.append(r)
 
     if(epoch % 100 == 0):
         print("loss: {} class rate: {}".format(l, r))
 
-    W2 = learning_rate * gradient_w2(YP, Y, Z2, Z1)
-    B2 = learning_rate * gradient_b2(YP, Y, Z2)
-    W1 = learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
-    B1 = learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
+    W2 += learning_rate * gradient_w2(YP, Y, Z2, Z1)
+    B2 += learning_rate * gradient_b2(YP, Y, Z2)
+    W1 += learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
+    B1 += learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
     
 
 
