@@ -48,10 +48,10 @@ D = X.shape[1]
 M = 16
 K = 1 
 
-W1 = np.random.randn(D, M) #3 x 3
-B1 = np.random.randn(M) #3
-W2 = np.random.randn(M, K) #3 x 1
-B2 = np.random.randn(K) #1
+W1 = np.random.randn(D, M) 
+B1 = np.random.randn(M) 
+W2 = np.random.randn(M, K)
+B2 = np.random.randn(K)
 
 
 train_size = .85
