@@ -76,12 +76,12 @@ for epoch in range(epochs):
     YP, Z1 = feedforward(X, W1, W2, B1, B2)
     Z2 = YP
     l = loss(YP, Y)
-    losses.append(l)
+    losses.append(-l)
     LP = np.rint(YP)
     r = class_rate(LP, Y)
     rates.append(r)
 
-    if(epoch % 100 == 0):
+    if(epoch % 1000 == 0):
         print("loss: {} class rate: {}".format(l, r))
 
     W2 += learning_rate * gradient_w2(YP, Y, Z2, Z1)
@@ -89,16 +89,12 @@ for epoch in range(epochs):
     W1 += learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
     B1 += learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
 
-
-
-
-
 plt.plot(losses)
 plt.show()
 
 plt.plot(rates)
 plt.show()
 
-Y, Z = feedforward(X_train, W1, B1, W2, B2)
-r = class_rate(Y, Y_train)
-print(r)
+Y, Z = feedforward(X_test, W1, W2, B1, B2)
+r = class_rate(np.rint(Y), Y_test)
+print("test-set class rate: ",r)
