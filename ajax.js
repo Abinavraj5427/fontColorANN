@@ -8,11 +8,12 @@ $('button').click(function(e) {
     $.ajax(
       {
         type: "POST",
-        url: 'request_ajax_data.php',
+        url: 'predict.php',
         data: str,
       },
       {
         success: function(data){
+          alert(data)
           $("#text").css("color", data === 0? "white": "black");
         },
         error: function() {
