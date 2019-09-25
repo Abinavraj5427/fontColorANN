@@ -4,13 +4,21 @@ $('button').click(function(e) {
     var G = $("#G").val();
     var B = $("#B").val();
     $("#form").css("background-color", "rgb("+R+","+G+","+B+")");
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function(){
-      if(this.readyState == 4 && this.status == 200){
-        $("#text").css("color", this.responseText === 0? "white": "black");
-      }
-    }
     str = R+ "-"+G+"-"+B;
-    xmlhttp.open("GET", "fontANN.php?q="+str, true);
-    xmlhttp.send();
+    $.ajax(
+      {
+        type: "POST",
+        url: 'request_ajax_data.php',
+        data: str,
+      },
+      {
+        success: function(data){
+          $("#text").css("color", data === 0? "white": "black");
+        },
+        error: function() {
+          alert('There was some error performing the AJAX call!');
+        }
+      }
+    )
+    
   });

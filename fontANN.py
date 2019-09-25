@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from process import get_data
 
+def predict(R, G, B):
+    return 0
+
 def sigmoid(Z):
     return 1/(1+np.exp(-Z))
 
