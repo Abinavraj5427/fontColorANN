@@ -4,12 +4,13 @@ $('button').click(function(e) {
     var G = $("#G").val();
     var B = $("#B").val();
     $("#form").css("background-color", "rgb("+R+","+G+","+B+")");
-    str = R+ "-"+G+"-"+B;
     $.ajax(
       {
         type: "POST",
         url: 'predict.php',
-        data: str,
+        data: [
+          R, G, B,
+        ]
       },
       {
         success: function(data){
