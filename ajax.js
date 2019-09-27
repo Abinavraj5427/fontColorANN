@@ -8,9 +8,11 @@ $('button').click(function(e) {
       {
         type: "POST",
         url: 'predict.php',
-        data: [
-          R, G, B,
-        ]
+        data: {
+          R,
+          G,
+          B
+        }
       },
       {
         success: function(data){
