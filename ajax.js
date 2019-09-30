@@ -12,17 +12,15 @@ $('button').click(function(e) {
           R,
           G,
           B
-        }
-      },
-      {
+        },
         success: function(data){
-          alert(data)
-          $("#text").css("color", data === 0? "white": "black");
+          $("#text").css("color", data == 0? "white": "black");
         },
         error: function() {
           alert('There was some error performing the AJAX call!');
         }
       }
     )
+    alert("DONE")
     
   });

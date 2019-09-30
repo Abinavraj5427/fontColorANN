@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from process import get_data
 
-def predict(R, G, B):
-    return 0
+
 
 def sigmoid(Z):
     return 1/(1+np.exp(-Z))
@@ -44,60 +43,66 @@ def loss(Y, T):
 def gradient_BCE(Y, T):
     return (T/Y) - (1-T)/(1-Y)
 
+def main():
+    X, Y = get_data()
 
-X, Y = get_data()
+    D = X.shape[1]
+    M = 16
+    K = 1 
 
-D = X.shape[1]
-M = 16
-K = 1 
-
-W1 = np.random.randn(D, M) 
-B1 = np.random.randn(M) 
-W2 = np.random.randn(M, K)
-B2 = np.random.randn(K)
-
-
-train_size = .85
-epochs = batch_size = 50000
+    W1 = np.random.randn(D, M) 
+    B1 = np.random.randn(M) 
+    W2 = np.random.randn(M, K)
+    B2 = np.random.randn(K)
 
 
-X_train = X[:(int)(X.shape[0] * train_size),:]
-X_test = X[(int)(X.shape[0] * train_size):,:]
-Y_train =  Y[:(int)(Y.shape[0] * train_size)]
-Y_test = Y[(int)(Y.shape[0] * train_size):] 
+    train_size = .85
+    epochs = batch_size = 50000
 
-X_batch = np.split(X_train, batch_size)
-Y_batch = np.split(Y_train, batch_size)
 
-learning_rate = 1e-5
-losses = []
-rates = []
-for epoch in range(epochs):
-    X = X_batch[epoch]
-    Y = Y_batch[epoch]
+    X_train = X[:(int)(X.shape[0] * train_size),:]
+    X_test = X[(int)(X.shape[0] * train_size):,:]
+    Y_train =  Y[:(int)(Y.shape[0] * train_size)]
+    Y_test = Y[(int)(Y.shape[0] * train_size):] 
 
-    YP, Z1 = feedforward(X, W1, W2, B1, B2)
-    Z2 = YP
-    l = loss(YP, Y)
-    losses.append(-l)
-    LP = np.rint(YP)
-    r = class_rate(LP, Y)
-    rates.append(r)
+    X_batch = np.split(X_train, batch_size)
+    Y_batch = np.split(Y_train, batch_size)
 
-    if(epoch % 1000 == 0):
-        print("loss: {} class rate: {}".format(l, r))
+    learning_rate = 1e-5
+    losses = []
+    rates = []
+    for epoch in range(epochs):
+        X = X_batch[epoch]
+        Y = Y_batch[epoch]
 
-    W2 += learning_rate * gradient_w2(YP, Y, Z2, Z1)
-    B2 += learning_rate * gradient_b2(YP, Y, Z2)
-    W1 += learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
-    B1 += learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
+        YP, Z1 = feedforward(X, W1, W2, B1, B2)
+        Z2 = YP
+        l = loss(YP, Y)
+        losses.append(-l)
+        LP = np.rint(YP)
+        r = class_rate(LP, Y)
+        rates.append(r)
 
-plt.plot(losses)
-plt.show()
+        if(epoch % 1000 == 0):
+            print("loss: {} class rate: {}".format(l, r))
 
-plt.plot(rates)
-plt.show()
+        W2 += learning_rate * gradient_w2(YP, Y, Z2, Z1)
+        B2 += learning_rate * gradient_b2(YP, Y, Z2)
+        W1 += learning_rate * gradient_w1(YP, Y, Z2, W2, Z1, X)
+        B1 += learning_rate * gradient_b1(YP, Y, Z2, W2, Z1)
 
-Y, Z = feedforward(X_test, W1, W2, B1, B2)
-r = class_rate(np.rint(Y), Y_test)
-print("test-set class rate: ",r)
+    plt.plot(losses)
+    plt.show()
+
+    plt.plot(rates)
+    plt.show()
+
+    Y, Z = feedforward(X_test, W1, W2, B1, B2)
+    r = class_rate(np.rint(Y), Y_test)
+    print("test-set class rate: ",r)
+
+if __name__ == "__main__":
+    main()
+
+def predict(R, G, B):
+    return 0
