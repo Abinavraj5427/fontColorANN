@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from process import get_data
+from tempfile import TemporaryFile
 
-
+outfile = TemporaryFile()
 
 def sigmoid(Z):
     return 1/(1+np.exp(-Z))
@@ -100,9 +101,17 @@ def main():
     Y, Z = feedforward(X_test, W1, W2, B1, B2)
     r = class_rate(np.rint(Y), Y_test)
     print("test-set class rate: ",r)
+    np.savez(outfile, W2 = W2, B2 = B2, W1 = W1, B1 = B1)
 
 if __name__ == "__main__":
     main()
 
 def predict(R, G, B):
-    return 0
+    X = np.array([R, G, B])
+    npzfile = np.load(outfile)
+    W2 = npzfile['W2']
+    B2 = npzfile['B2']
+    W1 = npzfile['W1']
+    B1 = npzfile['B1']
+    Y, Z = feedforward(X, W1, W2, B1, B2)
+    return 1
