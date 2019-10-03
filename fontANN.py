@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from process import get_data
 from tempfile import TemporaryFile
-
-outfile = TemporaryFile()
+from process import process_data
 
 def sigmoid(Z):
     return 1/(1+np.exp(-Z))
@@ -101,17 +100,19 @@ def main():
     Y, Z = feedforward(X_test, W1, W2, B1, B2)
     r = class_rate(np.rint(Y), Y_test)
     print("test-set class rate: ",r)
-    np.savez(outfile, W2 = W2, B2 = B2, W1 = W1, B1 = B1)
+    np.savez('matrix.npz', W2 = W2, B2 = B2, W1 = W1, B1 = B1)
 
 if __name__ == "__main__":
     main()
 
 def predict(R, G, B):
-    X = np.array([R, G, B])
-    npzfile = np.load(outfile)
-    W2 = npzfile['W2']
-    B2 = npzfile['B2']
-    W1 = npzfile['W1']
-    B1 = npzfile['B1']
-    Y, Z = feedforward(X, W1, W2, B1, B2)
+    # X = np.array([R, G, B])
+    # X = process_data(X)
+    # npzfile = np.load('matrix.npz')
+    # W2 = npzfile['W2']
+    # B2 = npzfile['B2']
+    # W1 = npzfile['W1']
+    # B1 = npzfile['B1']
+    # Y, Z = feedforward(X, W1, W2, B1, B2)
+    # return int(np.rint(Y[0]))
     return 1
