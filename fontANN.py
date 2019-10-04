@@ -106,13 +106,17 @@ if __name__ == "__main__":
     main()
 
 def predict(R, G, B):
-    # X = np.array([R, G, B])
-    # X = process_data(X)
-    # npzfile = np.load('matrix.npz')
-    # W2 = npzfile['W2']
-    # B2 = npzfile['B2']
-    # W1 = npzfile['W1']
-    # B1 = npzfile['B1']
-    # Y, Z = feedforward(X, W1, W2, B1, B2)
-    # return int(np.rint(Y[0]))
-    return 1
+    X = np.array([R, G, B])
+    X = process_data(X)
+    npzfile = np.load('matrix.npz')
+    W2 = npzfile['W2']
+    B2 = npzfile['B2']
+    W1 = npzfile['W1']
+    B1 = npzfile['B1']
+    Y, Z = feedforward(X, W1, W2, B1, B2)
+    return int(np.rint(Y[0]))
+    # return 1
+
+
+def nada():
+    return 0

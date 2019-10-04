@@ -14,7 +14,7 @@ $('button').click(function(e) {
           B
         },
         success: function(data){
-          alert(data);
+          console.log(data);
           $("#text").css("color", data == 0? "white": "black");
         },
         error: function() {
