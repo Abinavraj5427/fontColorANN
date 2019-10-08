@@ -15,7 +15,7 @@ $('button').click(function(e) {
         },
         success: function(data){
           console.log(data);
-          $("#text").css("color", data == 0? "white": "black");
+          $("#text").css("color", data == 1? "white": "black");
         },
         error: function() {
           alert('There was some error performing the AJAX call!');
